@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>決済・ポイント業界 週次動向レポート</title>
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #475569;
+    --dim: #64748b;
+    --teal: #0891b2;
+    --red: #ef4444;
+    --purple: #7c3aed;
+    --yellow: #d97706;
+    --green: #059669;
+    --orange: #ea580c;
+    --pink: #db2777;
+    --blue: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f4f8 40%, #faf5ff 100%);
+    color: var(--text);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    position: relative;
+  }
+  body::before { display: none; }
+  .wrap { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
+
+
+  /* HEADER */
+  .header { margin-bottom: 28px; }
+  .badge { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 10px var(--teal); }
+  .badge-text { font-size: 11px; letter-spacing: 4px; color: var(--teal); text-transform: uppercase; }
+  h1 { font-size: clamp(24px, 5vw, 30px); font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+  h1 span { color: var(--teal); }
+  .header-meta { font-size: 12px; color: #475569; }
+
+  /* TABS */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .tab-btn {
+    padding: 9px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .tab-btn.active { font-weight: 700; }
+  .tag {
+    font-size: 9px;
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-weight: 800;
+    color: #000;
+  }
+
+  /* DESCRIPTION BOX */
+  .desc-box {
+    margin-bottom: 16px;
+    padding: 13px 16px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.7;
+    position: relative;
+  }
+  .desc-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+  .desc-close {
+    position: absolute; top: 10px; right: 12px;
+    background: transparent; border: none;
+    color: var(--dim); font-size: 16px; cursor: pointer;
+  }
+  .desc-toggle {
+    margin-bottom: 16px; padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--dim); font-size: 11px; cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* ALERT */
+  .alert {
+    margin-bottom: 16px; padding: 12px 16px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .alert-icon { font-size: 18px; flex-shrink: 0; }
+  .alert-title { font-size: 13px; color: var(--orange); font-weight: 700; margin-bottom: 3px; }
+  .alert-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* PANEL */
+  .panel {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 22px;
+    min-height: 220px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .panel-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .panel-icon { font-size: 18px; }
+  .panel-title { font-size: 17px; font-weight: 800; margin: 0; }
+  .summary-bar {
+    padding: 11px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 14px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #1e293b;
+  }
+
+  /* ITEMS */
+  .items { display: flex; flex-direction: column; gap: 14px; }
+  .item {
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 0 12px;
+    align-items: start;
+  }
+  .item-num {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800;
+    margin-top: 2px;
+  }
+  .item-title { font-size: 14px; font-weight: 700; line-height: 1.4; margin-bottom: 5px; }
+  .item-detail { font-size: 12px; color: #374151; line-height: 1.7; margin-bottom: 8px; }
+  .achievement {
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .meta-date {
+    font-size: 10px; color: #475569;
+    background: rgba(255,255,255,0.04);
+    padding: 2px 8px; border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .meta-link {
+    font-size: 10px;
+    padding: 2px 8px; border-radius: 4px;
+    text-decoration: none;
+  }
+
+  /* COMPANY RESEARCH */
+  .company-input-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .company-input {
+    flex: 1; min-width: 160px;
+    padding: 13px 14px;
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+    -webkit-appearance: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: border-color 0.15s;
+  }
+  .company-input:focus { border-color: var(--pink); }
+  .company-input:disabled { opacity: 0.5; }
+  .search-btn {
+    padding: 13px 20px;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .search-btn:disabled { cursor: not-allowed; }
+  .loading-bar {
+    margin-top: 10px; padding: 10px 14px;
+    background: #fdf4ff;
+    border: 1px solid #e9d5ff;
+    border-radius: 8px;
+    font-size: 13px; color: var(--pink);
+  }
+  .error-bar {
+    margin-top: 10px; padding: 12px 14px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    font-size: 12px; color: var(--red);
+    line-height: 1.7;
+  }
+  .company-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .company-tab-btn {
+    padding: 7px 14px; border-radius: 6px;
+    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .result-divider { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 4px; }
+  .company-header {
+    margin-bottom: 14px; padding: 16px;
+    background: linear-gradient(135deg, #fdf4ff, #faf5ff);
+    border: 1px solid #e9d5ff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(219,39,119,0.08);
+  }
+  .company-name { font-size: 19px; font-weight: 800; color: var(--pink); margin-bottom: 8px; }
+  .company-date { font-size: 10px; color: var(--dim); }
+  .company-desc { font-size: 13px; color: #1e293b; line-height: 1.7; margin-bottom: 10px; }
+  .company-news { font-size: 12px; color: #374151; line-height: 1.6; margin-bottom: 10px; }
+  .company-news strong { color: var(--pink); }
+  .affinity-box {
+    display: inline-flex; flex-direction: column; gap: 3px;
+    padding: 10px 14px; border-radius: 8px;
+  }
+  .affinity-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .affinity-value { font-size: 15px; font-weight: 800; }
+  .affinity-reason { font-size: 11px; color: #374151; }
+  .company-official { margin-top: 10px; font-size: 11px; color: var(--pink); text-decoration: none; }
+  .services-title { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 10px; }
+  .service-item {
+    padding: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;
+  }
+  .service-cat {
+    font-size: 10px; border-radius: 4px;
+    padding: 2px 8px; font-weight: 700;
+    white-space: nowrap; align-self: flex-start; margin-top: 2px;
+  }
+  .service-body { flex: 1; }
+  .service-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+  .service-name { font-size: 14px; font-weight: 700; }
+  .service-target {
+    font-size: 10px; color: #374151;
+    background: rgba(255,255,255,0.04);
+    padding: 1px 7px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .service-desc { font-size: 12px; color: #374151; line-height: 1.6; margin-bottom: 6px; }
+  .service-link { font-size: 10px; color: var(--pink); text-decoration: none; }
+  .empty-state { text-align: center; padding: 32px 0; color: var(--dim); border-top: 1px solid var(--border); margin-top: 4px; }
+  .empty-icon { font-size: 32px; opacity: 0.2; margin-bottom: 8px; }
+
+  .footer { margin-top: 14px; font-size: 10px; color: #475569; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- API KEY BANNER HIDDEN -->
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">
+      <div class="dot"></div>
+      <span class="badge-text">FINTECH INTELLIGENCE</span>
+    </div>
+    <h1>決済・ポイント業界<br><span>週次動向レポート</span></h1>
+    <div class="header-meta">📅 収集日: 2026年5月1日</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="tabs"></div>
+
+  <!-- DESC BOX -->
+  <div id="descBox"></div>
+
+  <!-- ALERT (regulations only) -->
+  <div class="alert" id="regAlert" style="display:none">
+    <span class="alert-icon">⚠️</span>
+    <div>
+      <div class="alert-title">2025年改正法が2026年6月までに施行予定</div>
+      <div class="alert-body">法的判断は専門家にご相談ください。</div>
+    </div>
+  </div>
+
+  <!-- MAIN PANEL -->
+  <div class="panel" id="mainPanel"></div>
+
+  <div class="footer">Claudeがウェブ検索した情報です（2026年5月1日収集）。法的・税務的な判断は専門家にご確認ください。</div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const CATEGORIES = [
+  { id: "regulations", label: "資金決済法", icon: "📋", color: "#f97316",
+    description: "「資金決済法」は、電子マネーやポイント（前払式支払手段）を発行する事業者が守らなければならないルールを定めた法律です。ハウス電子マネーを導入・運用する企業にとって必須の知識で、届出・供託・本人確認などの義務が規定されています。" },
+  { id: "company_research", label: "企業調査", icon: "🏢", color: "#db2777", description: "" },
+  { id: "new_releases", label: "新リリース", icon: "🆕", color: "#0891b2",
+    description: "「ハウス電子マネー」とは、特定のお店やグループ内だけで使える独自の電子マネーのこと。WAONやSuicaのような「どこでも使えるもの」とは違い、例えばスーパーXXX専用のチャージ式カードなどがこれにあたります。このカテゴリでは新しくリリースされたハウス電子マネー・ポイントサービスをまとめています。" },
+  { id: "campaigns", label: "キャンペーン情報", icon: "🎁", color: "#dc2626",
+    description: "ハウス電子マネーやポイントサービスの「お得なキャンペーン」情報です。チャージするとボーナスがもらえるキャンペーン、ポイント還元率アップ、地域の商品券事業など、消費者・事業者ともに活用できる最新情報をまとめています。" },
+  { id: "balance_systems", label: "残高管理システム", icon: "💰", color: "#7c3aed",
+    description: "「残高管理システム」とは、電子マネーやポイントの残高・利用履歴・チャージ状況などをサーバー上で一元管理するシステムのこと。お店側が導入するBtoB向けのサービスで、「自社の電子マネーを作りたい」企業に提供されます。" },
+  { id: "pos_services", label: "POSサービス", icon: "🖥️", color: "#b45309",
+    description: "「POS（Point of Sale）」とは、レジでの会計と同時に売上・在庫データを記録・管理するシステムのこと。最近はiPadやスマホで使えるクラウド型が普及。電子マネーやQR決済との連携も標準化されています。" },
+  { id: "terminal_services", label: "専用端末サービス", icon: "📟", color: "#059669",
+    description: "電子マネーやキャッシュレス決済を受け付けるための「専用端末」を提供するサービスです。店頭設置型・KIOSK型・ハンディ型など様々な種類があります。" },
+];
+
+const REPORT_DATA = {
+  new_releases: {
+    summary: "2025〜2026年、Pokepay・バリューデザイン・GMOデジタルPay・TOPPANなどが主要サービス。中小個人店から大手チェーンまで規模別に選べるプラットフォームが揃ってきた。",
+    items: [
+      { title: "Pokepay（ポケペイ）", detail: "1店舗・個人でも導入できるアプリ型ハウス電子マネー。開発費0円・商談不要で即日開始。美容院・カフェ・コワーキングスペースなど中小店舗に強い。エンタープライズプランで大手チェーンにも対応。", achievement: "🏆 全国10万店舗以上・1,500社以上・毎日40万人利用（2025年2月）／中小〜大企業対応", date: "2025年2月時点の公式実績", source: "pokepay.jp", url: "https://pokepay.jp/ja/entries/101" },
+      { title: "バリューデザイン 独自Pay（Value Card）", detail: "飲食チェーン・スーパー・ドラッグストアなど大手〜中堅向けのハウス電子マネーASP。2025年3月に長野県A・コープ（29店舗）、物語コーポレーション（焼肉きんぐ等）の株主優待電子化など新規導入続く。", achievement: "🏆 導入12万店舗突破・年間決済取扱高約1.22兆円（2024年8月末）／大手飲食〜中堅スーパー中心", date: "2024年8月末・2025年3月新規導入", source: "valuedesign.jp", url: "https://www.valuedesign.jp/information/" },
+      { title: "GMOデジタルPay", detail: "初期開発費0円から導入できるデジタル商品券・ハウス電子マネー。株主優待・福利厚生・独自Pay対応。利用状況ダッシュボード・クーポン配信機能も標準搭載。自治体向けパッケージも提供。", achievement: "🏆 2024〜2025年継続利用実績多数／中小店舗〜自治体まで対応・初期費用0円で参入障壁低", date: "2024〜2025年実績（GMO公式）", source: "gmo-digitalpay.jp", url: "https://gmo-digitalpay.jp/" },
+      { title: "インフキュリオン Wallet Station", detail: "フルクラウドAPIで企業のオリジナルPayを構築するB2Bプラットフォーム。コカ・コーラ「Coke ON Wallet」・ツルハ「HAPPAY」・鹿児島銀行「Payどん」など著名企業への実績多数。2025年10月に新BtoB決済「Auction Pay」も発表。", achievement: "🏆 大手〜金融機関向け専門・NTTデータと資本提携・コカ・コーラ/ツルハHD/地方銀行多数採用", date: "2025年10月新提携発表", source: "paymentnavi.com", url: "https://paymentnavi.com/paymentnews/156065.html" },
+      { title: "TOPPAN ハウス電子マネー", detail: "2006年業界先駆けでサービス開始。イズミヤ（H2O系列）「Litta」など大型流通チェーンへの導入実績。ポイント一体型ICカードとアプリ両対応。カード製造・法務・販促まで一括サポートのワンストップ体制。", achievement: "🏆 2006年〜20年の実績・大手流通・アパレル・飲食チェーンが主要顧客／中堅以上の企業向け", date: "サービス提供中（TOPPAN公式）", source: "toppan.co.jp", url: "https://solution.toppan.co.jp/toppan-digital/service/house_prepaid.html" },
+    ]
+  },
+  campaigns: {
+    summary: "2025〜2026年、自治体のプレミアム商品券・地域通貨アプリ連携キャンペーンが全国的に拡大。民間では各社のチャージ特典・ポイント倍増が継続。",
+    items: [
+      { title: "福岡市「FUKUOKA NEXT Pay」第5弾", detail: "福岡市が2026年度に実施するプレミアム付電子商品券。プレミアム率20%で5,000円購入→6,000円分利用可。1人最大30,000円まで購入（36,000円分相当）。スマホアプリと紙チケット両対応。抽選販売予定。", achievement: "🏆 第5弾と継続実施中・過去4回実績あり・福岡市民向け大規模キャンペーン", date: "2026年度実施予定（2026年4月27日更新）", source: "monomoney-living.com", url: "https://monomoney-living.com/2026-goverment-zenkoku/" },
+      { title: "東京都各区 地域通貨型アプリキャンペーン", detail: "渋谷区「ハチペイ」・世田谷区「せたPay」などの地域通貨型アプリとPayPay・d払い・au PAY・楽天ペイ連携のポイント還元キャンペーンを複数展開中。在住者以外も利用できるキャンペーンも多い。", achievement: "🏆 都内複数区で独立したアプリが稼働中・区民以外も参加可能なオープン型", date: "2026年4月〜継続中", source: "monomoney-living.com", url: "https://monomoney-living.com/2026-goverment-zenkoku/" },
+      { title: "全国自治体 重点支援交付金キャッシュレス還元", detail: "国の物価高騰対応交付金を活用した全国規模のキャンペーン。2026年4月以降、プレミアム付商品券やポイント還元が多数実施予定。対象は主に住民税非課税世帯や均等割のみ課税世帯。", achievement: "🏆 全国47都道府県・多数の市区町村が参加する国規模の施策", date: "2026年4月〜（2026年4月27日更新）", source: "monomoney-living.com", url: "https://monomoney-living.com/2026-goverment-zenkoku/" },
+      { title: "i-Prepaid（アイネット） ボーナスバリューキャンペーン機能", detail: "ハウス電子マネーシステム「i-Prepaid」が提供するキャンペーン機能。チャージ時のボーナス付与・有効期限の個別管理など自由度の高いキャンペーン設計が可能。", achievement: "🏆 小売業・スーパー向けに多数導入実績・中小〜中堅規模の店舗が主な顧客層", date: "サービス提供中（アイネット公式）", source: "inet.co.jp", url: "https://www.inet.co.jp/product/fintech/prepaid.html" },
+      { title: "majica（ドン・キホーテ）継続キャンペーン", detail: "ドン・キホーテ系列のハウス電子マネー「majica」で会員向け特典を継続実施。アピタ・ピアゴなどグループ全体で利用可。アプリ対応でカード不要での利用も可。", achievement: "🏆 全国ドン・キホーテ・アピタ・ピアゴ等グループ全体の大規模展開・大企業向けハウス電子マネーの代表事例", date: "継続実施中", source: "officepay.jp", url: "https://officepay.jp/magazine/detail/house-e-money.html" },
+    ]
+  },
+  regulations: {
+    summary: "2025年6月に改正資金決済法が成立・公布。2026年6月までに施行予定。ハウス電子マネー事業者は「高額電子移転可能型への対応」「供託・届出義務」「2025年改正の新規制」を必ず確認すること。",
+    items: [
+      { title: "【最重要・2026年施行予定】2025年改正資金決済法の概要", detail: "2025年6月6日成立・6月13日公布。公布から1年以内（2026年6月13日まで）に施行予定。主な改正点は①資金移動業の保全制度の新設②クロスボーダー収納代行への資金移動業登録義務③電子決済手段・暗号資産サービス仲介業の新設④ステーブルコイン裏付け資産に50%まで国債等を認める⑤海外業者への資産国内保有命令の新設。", achievement: "⚠️ 対象事業者：資金移動業者・クロスボーダー収納代行事業者・電子決済手段取扱業者。施行日までに社内体制整備が必要", date: "2025年6月13日公布・2026年6月13日までに施行予定（businesslawyers.jp 2025年7月記事）", source: "businesslawyers.jp", url: "https://www.businesslawyers.jp/articles/1476" },
+      { title: "【要注意】高額電子移転可能型前払式支払手段への対応（令和4年改正・施行済）", detail: "高額チャージや残高移転が可能な電子マネーに対してマネーロンダリング防止の観点から本人確認（KYC）義務が課された。対象事業者には①本人確認の実施②疑わしい取引の届出③社内体制整備の義務が課される。", achievement: "⚠️ 対象事業者：高額電子移転可能型の前払式支払手段発行者。未対応の場合は行政処分リスクあり", date: "令和4年改正・施行済（デロイトトーマツ解説記事）", source: "deloitte.com/jp", url: "https://www.deloitte.com/jp/ja/services/risk-advisory/perspectives/high-value-electronic-transferable-prepaid-instruments-support.html" },
+      { title: "【基礎知識】自家型前払式支払手段の届出義務と供託ルール", detail: "自店舗専用のハウス電子マネー（自家型）を発行する場合、毎年3月末・9月末時点の「未使用残高」が1,000万円を超えたら財務局へ届出が必要。届出後はさらに未使用残高の2分の1以上の額を法務局（供託所）に供託しなければならない。「有効期限を6か月以内に設定する」と供託義務を回避できる。「おまけ・値引き」として無償付与されるポイントは対象外。", achievement: "📋 対象事業者：ハウス電子マネー・プリペイドカードを発行するすべての企業（個人〜大企業まで）", date: "現行法（2025年3月時点 ec-lawyer.com記事・日本資金決済業協会公式）", source: "s-kessai.jp", url: "https://www.s-kessai.jp/businesses/prepaid_means_overview.html" },
+      { title: "【基礎知識】第三者型前払式支払手段の登録制度", detail: "自社以外の第三者の店舗でも使える電子マネー（第三者型）を発行する場合は、事前に財務局長への「登録」が必要。百貨店共通商品券・交通系ICカードのチャージなどが代表例。第三者型の発行業務を他者に譲渡する場合は、承継先の登録が必要。", achievement: "📋 対象事業者：複数の提携店舗・加盟店で使える電子マネーを発行する企業／事前登録なしの発行は違法", date: "現行法（財務省関東財務局・日本資金決済業協会公式）", source: "lfb.mof.go.jp", url: "https://lfb.mof.go.jp/kantou/kinyuu/pagekthp00400036.html" },
+      { title: "【ポイント設計の注意点】ポイントが「前払式支払手段」に該当するケース", detail: "「ポイント」という名称でも、①利用者から対価を得て発行し②物品やサービスの支払に使え③記録されている場合は資金決済法の規制対象になる。購入金額に応じて無償付与されるポイント（値引き・おまけ）や有効期限6か月以内のポイントは対象外。", achievement: "📋 対象事業者：ECサイト・アプリ・店舗でポイントサービスを提供するすべての企業", date: "2025年3月時点（ec-lawyer.com・金融庁FAQ）", source: "ec-lawyer.com", url: "https://ec-lawyer.com/5741/" },
+    ]
+  },
+  balance_systems: {
+    summary: "クラウドAPI型の残高管理が主流。バリューデザイン＋アララが統合しNo.1プレイヤーに。大企業向けはインフキュリオン、中堅以下はPokepay・GMOが強い。",
+    items: [
+      { title: "バリューデザイン＋アララ 統合プラットフォーム", detail: "2022年に両社が経営統合し、ハウス電子マネー市場No.1プレイヤーに。年間決済取扱高約1兆円・導入店舗約12万店舗。飲食・小売・自治体向けにクラウド型残高管理・ポイント・分析機能をワンパッケージで提供。", achievement: "🏆 国内No.1・年間取扱高約1兆円・導入12万店舗超（2024年8月末）／中堅〜大企業向けが中心", date: "2022年統合完了・2024年8月末実績", source: "paymentnavi.com", url: "https://paymentnavi.com/paymentnews/118855.html" },
+      { title: "インフキュリオン Wallet Station", detail: "フルクラウドAPIによるハウス電子マネー残高・ポイント発行管理。コカ・コーラ・ツルハHD・地方銀行など大手に採用。2025年10月に新たなBtoB決済サービスも開始。", achievement: "🏆 大企業・金融機関専門・コカ・コーラ/ツルハ/地銀など著名企業多数採用／NTTデータと資本業務提携", date: "2025年10月新提携（infcurion.com）", source: "infcurion.com", url: "https://infcurion.com/moment/" },
+      { title: "TOPPAN ValueFront Analytics", detail: "電子マネー利用状況・効果分析の新機能を搭載したクラウド型残高管理。コープネット事業連合（会員466万人）など大規模事業者への提供実績あり。", achievement: "🏆 会員466万人規模のコープネットなど大規模導入実績あり／大手流通・生協が主要顧客", date: "サービス提供中（TOPPAN公式・富士通Japan連携）", source: "fujitsu.com", url: "https://www.fujitsu.com/jp/group/fjj/solutions/industry/cashless/emoney/" },
+      { title: "富士通Japan サーバ管理型電子マネーサービス", detail: "ハウス型電子マネー・ギフトカード・デジタルギフトを実現するクラウドサービス。「ValueFront Analytics」で利用状況・効果分析も可能。", achievement: "🏆 コープネット（会員466万人）など大規模生協・スーパーに導入実績／大企業・大規模チェーン向け", date: "サービス提供中（富士通Japan公式）", source: "fujitsu.com", url: "https://www.fujitsu.com/jp/group/fjj/solutions/industry/cashless/emoney/" },
+      { title: "NECソリューションイノベータ ハウス電子マネーシステム", detail: "小売業向けPOSシステムと連携したハウス電子マネー・QRコード決済ソリューション。キャッシュフロー改善・自社キャンペーン実施・退蔵益活用などを訴求。", achievement: "🏆 大手スーパーチェーン・大規模小売業が主要顧客・POSとの一体導入で業務効率化可能／中堅〜大企業向け", date: "サービス提供中（NEC公式）", source: "nec-solutioninnovators.co.jp", url: "https://www.nec-solutioninnovators.co.jp/ss/retail/products/system/qr-payment/house/" },
+    ]
+  },
+  pos_services: {
+    summary: "2025〜2026年、クラウド型POSが完全主流化。スマレジ・Square・Airレジ・POS+の4強体制。個人店〜大チェーンまで規模別に選べる環境が整った。",
+    items: [
+      { title: "スマレジ", detail: "iOS向けクラウドPOS。130以上の機能を持ち複数店舗・在庫管理・会計ソフト連携に対応。専用端末「PAYGATE」連携でクレカ・電子マネー・QR決済をハンディ端末1台で完結。", achievement: "🏆 登録店舗数117,000店舗以上（2022年6月）・中小〜中堅チェーンまで幅広く対応", date: "2026年4月時点（ebisumart.com）", source: "ebisumart.com", url: "https://ebisumart.com/blog/pos-regi/" },
+      { title: "Square POSレジ", detail: "初期費用・月額0円。申込当日から利用可。非接触決済・オンライン販売連携に強み。手数料がシンプルで透明なため、初めてPOSを導入する個人事業主に最も人気。", achievement: "🏆 世界展開・日本国内でも個人店〜中小企業に幅広く浸透・三井住友カードと業務提携", date: "2026年4月時点（squareup.com公式）", source: "squareup.com", url: "https://squareup.com/jp/ja/townsquare/pos-cashier-comparison" },
+      { title: "POS+（ポスタス）", detail: "飲食（FOOD）・小売（retail）など業種特化型のプランを提供するクラウドPOS。インボイス・新税制にも柔軟対応。電子マネー・クレカ・QR各種決済対応。", achievement: "🏆 2026年4月現在POSレジランキング上位・飲食チェーン・小売チェーンに多数導入実績", date: "2026年版（postas.co.jp公式）", source: "postas.co.jp", url: "https://www.postas.co.jp/makesmiles/12659/" },
+      { title: "Airレジ（リクルート）", detail: "初期費用・月額無料のiPad向けPOSアプリ。会計・商品管理・顧客管理・売上分析を無料で提供。各種電子マネー・QR決済対応。個人店・小規模事業者に特に強い。", achievement: "🏆 個人事業主〜小規模店舗向けで国内トップクラスの普及率・リクルートグループの強力なサポート体制", date: "2026年4月時点（ebisumart.com）", source: "ebisumart.com", url: "https://ebisumart.com/blog/pos-regi/" },
+      { title: "NECソリューションイノベータ 小売業向けPOS", detail: "大規模小売チェーン向けPOSシステムにハウス電子マネー・QR決済を統合。既存POSへのハウス電子マネー機能追加が可能。大規模チェーン特有の複数店舗管理・本部集計に強み。", achievement: "🏆 大手スーパーチェーン・大規模小売業が主要顧客・小規模店舗よりも大企業向け専門", date: "サービス提供中（NEC公式）", source: "nec-solutioninnovators.co.jp", url: "https://www.nec-solutioninnovators.co.jp/ss/retail/products/system/qr-payment/house/" },
+    ]
+  },
+  terminal_services: {
+    summary: "2025〜2026年、マルチ対応ハンディ端末・KIOSK型チャージ機・スマホ連携型端末が三本柱。飛天ジャパンが2025年に3新製品を一挙発表。",
+    items: [
+      { title: "飛天ジャパン 新決済端末3製品", detail: "2025年にポータブル決済端末・オールインワン決済端末・スマート決済端末の3製品を一挙リリース。各種電子マネー・クレカ・QR決済対応。業種問わず幅広い店舗での導入を想定。", achievement: "🏆 2025年新製品3種同時リリース・中小〜中堅の一般店舗向け・パートナー経由の幅広い流通網", date: "2025年リリース（paymentnavi.com）", source: "paymentnavi.com", url: "https://paymentnavi.com/paymentnews/165429.html" },
+      { title: "スマレジ・PAYGATE", detail: "重さ445gの軽量ハンディ決済端末。Wi-Fi/4G/Bluetooth対応でどこでも持ち運んで決済可能。クレカ・電子マネー・QR決済対応。感熱プリンター内蔵。スマレジPOSとシームレス連携。", achievement: "🏆 スマレジ導入117,000店舗以上で利用・小売・飲食・イベント等中小〜中堅店舗が対象", date: "2025〜2026年提供中（kigyolog.com）", source: "kigyolog.com", url: "https://kigyolog.com/service.php?id=20" },
+      { title: "システムギア KIOSK型ハウス電子マネーチャージ機", detail: "小売業向けのハウス電子マネー専用チャージ機（KIOSK端末）。現金チャージとキャッシュカードによる現金不要チャージの両方に対応。セキュリティ性の高いカセット方式で現金回収。", achievement: "🏆 スーパーマーケット・ホームセンターなど中堅〜大型小売チェーンへの導入実績多数", date: "サービス提供中（systemgear.com公式）", source: "systemgear.com", url: "https://www.systemgear.com/solutions/retail/charge_system.html" },
+      { title: "オフィスペイ 自動販売機向けキャッシュレス端末", detail: "自動販売機に設置できるキャッシュレス決済端末。ハウス電子マネーや社員証払いに対応し、企業が飲み物代を負担する福利厚生設定も可能。条件を満たせば導入費・月額費用が無料。", achievement: "🏆 オフィス・工場・病院など法人施設の自販機向けに特化・中小〜大企業の社内設置用として幅広く導入", date: "サービス提供中（officepay.jp）", source: "officepay.jp", url: "https://officepay.jp/magazine/detail/house-e-money.html" },
+      { title: "ネットスターズ マルチ決済端末・ゲートウェイ", detail: "電子マネー・クレカ・QR・バーコードなど多数のキャッシュレス決済をワンストップ対応。全国の小売・飲食・交通など多業種に導入。インバウンド対応の多通貨決済にも強い。", achievement: "🏆 全国の小売・飲食・交通など多業種に導入・中小〜大企業まで幅広い実績・多通貨対応でインバウンド需要にも強い", date: "サービス提供中（paymentnavi.com掲載）", source: "paymentnavi.com", url: "https://paymentnavi.com/paymentnews/165429.html" },
+    ]
+  }
+};
+
+// ── STATE ──────────────────────────────────────────────
+let activeTab = "regulations";
+let showDesc = true;
+let companies = [];
+let activeCompany = null;
+let searchLoading = false;
+let searchError = "";
+let searchName = "";
+let apiKey = "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";
+
+// ── API KEY ──────────────────────────────────────────────
+
+// ── HELPERS ──────────────────────────────────────────────
+function catColor(cat) {
+  const map = { "電子マネー": "#00e5cc", "POS": "#fbbf24", "残高管理": "#a78bfa", "決済端末": "#34d399", "ポイント": "#ff6b6b", "ギフトカード": "#e879f9", "決済": "#60a5fa" };
+  for (const key of Object.keys(map)) { if (cat && cat.includes(key)) return map[key]; }
+  return "#6b7280";
+}
+
+function affinityStyle(level) {
+  if (level === "high") return { bg: "rgba(0,229,204,0.1)", border: "rgba(0,229,204,0.35)", text: "#00e5cc", label: "★★★ 高い" };
+  if (level === "medium") return { bg: "rgba(251,191,36,0.1)", border: "rgba(251,191,36,0.35)", text: "#fbbf24", label: "★★☆ 中程度" };
+  return { bg: "rgba(156,163,175,0.08)", border: "rgba(156,163,175,0.25)", text: "#9ca3af", label: "★☆☆ 低い" };
+}
+
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function esc(s) {
+  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── RENDER ──────────────────────────────────────────────
+function renderAll() {
+  renderTabs();
+  renderDesc();
+  renderAlert();
+  renderPanel();
+}
+
+function renderTabs() {
+  const el = document.getElementById("tabs");
+  el.innerHTML = CATEGORIES.map(cat => {
+    const isActive = activeTab === cat.id;
+    const style = `border-color:${isActive ? cat.color : "rgba(255,255,255,0.08)"}; background:${isActive ? cat.color+"18" : "rgba(255,255,255,0.03)"}; color:${isActive ? cat.color : "var(--muted)"};`;
+    let badge = "";
+    if (cat.id === "regulations") badge = `<span class="tag" style="background:#f97316">重要</span>`;
+    if (cat.id === "company_research") badge = `<span class="tag" style="background:#e879f9">NEW</span>`;
+    return `<button class="tab-btn${isActive?" active":""}" style="${style}" onclick="switchTab('${cat.id}')">${cat.icon} ${cat.label}${badge}</button>`;
+  }).join("");
+}
+
+function renderDesc() {
+  const el = document.getElementById("descBox");
+  const cat = CATEGORIES.find(c => c.id === activeTab);
+  if (activeTab === "company_research" || !cat.description) { el.innerHTML = ""; return; }
+  if (showDesc) {
+    el.innerHTML = `<div class="desc-box"><div class="desc-label" style="color:${cat.color}">💡 このカテゴリについて</div><div>${esc(cat.description)}</div><button class="desc-close" onclick="toggleDesc()">✕</button></div>`;
+  } else {
+    el.innerHTML = `<button class="desc-toggle" onclick="toggleDesc()">💡 解説を表示</button>`;
+  }
+}
+
+function renderAlert() {
+  document.getElementById("regAlert").style.display = activeTab === "regulations" ? "flex" : "none";
+}
+
+function renderPanel() {
+  const panel = document.getElementById("mainPanel");
+  const cat = CATEGORIES.find(c => c.id === activeTab);
+  panel.style.borderColor = cat.color + "30";
+
+  if (activeTab === "company_research") {
+    renderCompanyPanel(panel, cat);
+    return;
+  }
+
+  const data = REPORT_DATA[activeTab];
+  const isReg = activeTab === "regulations";
+  const achBg = isReg ? "#fff7ed" : "#fefce8";
+  const achBorder = isReg ? "#fed7aa" : "#fef08a";
+  const achColor = isReg ? "#ea580c" : "#a16207";
+
+  panel.innerHTML = `
+    <div class="panel-header">
+      <span class="panel-icon" style="color:${cat.color}">${cat.icon}</span>
+      <h2 class="panel-title">${esc(cat.label)}</h2>
+    </div>
+    <div class="summary-bar" style="background:${cat.color}0c; border-left:3px solid ${cat.color}">${esc(data.summary)}</div>
+    <div class="items">
+      ${data.items.map((item, i) => `
+        <div class="item">
+          <div class="item-num" style="background:${cat.color}20; border:1px solid ${cat.color}40; color:${cat.color}">${i+1}</div>
+          <div>
+            <div class="item-title">${esc(item.title)}</div>
+            <div class="item-detail">${esc(item.detail)}</div>
+            <div class="achievement" style="background:${achBg}; border:1px solid ${achBorder}; color:${achColor}">${esc(item.achievement)}</div>
+            <div class="meta">
+              <span class="meta-date">📅 ${esc(item.date)}</span>
+              <a class="meta-link" href="${esc(item.url)}" target="_blank" style="color:${cat.color}; background:${cat.color}10; border:1px solid ${cat.color}30">🔗 ${esc(item.source)}</a>
+            </div>
+          </div>
+        </div>
+      `).join("")}
+    </div>`;
+}
+
+function renderCompanyPanel(panel, cat) {
+  const cur = companies.find(c => c.company === activeCompany) || companies[0] || null;
+
+  // ローディング・エラー表示
+  let statusHtml = "";
+  if (searchLoading) {
+    statusHtml = `<div class="loading-bar">「${esc(searchName)}」を調査中です。しばらくお待ちください...</div>`;
+  } else if (searchError) {
+    statusHtml = `<div class="error-bar"><strong>エラー:</strong> ${esc(searchError)}</div>`;
+  }
+
+  let tabsHtml = "";
+  if (companies.length > 1) {
+    tabsHtml = `<div class="company-tabs">${companies.map(c => {
+      const isAct = c.company === (activeCompany || companies[0]?.company);
+      const af = affinityStyle(c.house_emoney_affinity);
+      return `<button class="company-tab-btn" style="border:1px solid ${isAct?"#e879f9":"rgba(255,255,255,0.1)"}; background:${isAct?"rgba(232,121,249,0.15)":"rgba(255,255,255,0.03)"}; color:${isAct?"#e879f9":"var(--muted)"}; font-weight:${isAct?700:400}" onclick="selectCompany('${esc(c.company)}')">${esc(c.company)} <span style="color:${af.text};font-size:10px">${"★".repeat(c.house_emoney_affinity==="high"?3:c.house_emoney_affinity==="medium"?2:1)}</span></button>`;
+    }).join("")}</div>`;
+  }
+
+  let resultHtml = "";
+  if (cur) {
+    const af = affinityStyle(cur.house_emoney_affinity);
+    resultHtml = `
+      <div class="result-divider">
+        <div class="company-header">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+            <div class="company-name">${esc(cur.company)}</div>
+            ${cur.fetchedAt ? `<span class="company-date">調査日: ${fmtDate(cur.fetchedAt)}</span>` : ""}
+          </div>
+          <div class="company-desc">${esc(cur.description)}</div>
+          ${cur.news ? `<div class="company-news"><strong>📰 最新動向：</strong>${esc(cur.news)}</div>` : ""}
+          ${cur.house_emoney_affinity ? `
+            <div class="affinity-box" style="background:${af.bg}; border:1px solid ${af.border}">
+              <span class="affinity-label">ハウス電子マネー・ギフトカードとの親和性</span>
+              <span class="affinity-value" style="color:${af.text}">${af.label}</span>
+              ${cur.affinity_reason ? `<span class="affinity-reason">${esc(cur.affinity_reason)}</span>` : ""}
+            </div>` : ""}
+          ${cur.source_url && cur.source_url.startsWith("http") ? `<a class="company-official" href="${esc(cur.source_url)}" target="_blank">🔗 公式サイト</a>` : ""}
+        </div>
+        <div class="services-title">展開サービス一覧</div>
+        ${(cur.services||[]).map(svc => {
+          const cc = catColor(svc.category);
+          return `<div class="service-item">
+            <span class="service-cat" style="background:${cc}20; color:${cc}; border:1px solid ${cc}40">${esc(svc.category)}</span>
+            <div class="service-body">
+              <div class="service-name-row">
+                <span class="service-name">${esc(svc.name)}</span>
+                ${svc.target ? `<span class="service-target">${esc(svc.target)}</span>` : ""}
+              </div>
+              <div class="service-desc">${esc(svc.description)}</div>
+              ${svc.url && svc.url.startsWith("http") ? `<a class="service-link" href="${esc(svc.url)}" target="_blank">🔗 サービスページ</a>` : ""}
+            </div>
+          </div>`;
+        }).join("")}
+      </div>`;
+  }
+
+  panel.innerHTML = `
+    <div style="margin-bottom:16px">
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px">企業名を入力して「調査する」を押してください。</p>
+      <div class="company-input-row">
+        <input class="company-input" id="companyInput" type="text" placeholder="例：イオン、スマレジ、Square..." ${searchLoading?"disabled":""} onkeydown="if(event.key==='Enter')doSearch()" />
+        <button class="search-btn" id="searchBtn"
+          style="background:${searchLoading?"rgba(255,255,255,0.04)":"rgba(232,121,249,0.2)"}; border:1px solid ${searchLoading?"rgba(255,255,255,0.1)":"rgba(232,121,249,0.6)"}; color:${searchLoading?"var(--dim)":"#e879f9"}"
+          onclick="doSearch()" ${searchLoading?"disabled":""}>
+          ${searchLoading?"調査中...":"🔍 調査する"}
+        </button>
+      </div>
+      ${statusHtml}
+    </div>
+    ${tabsHtml}
+    ${companies.length === 0 && !searchLoading ? `<div class="empty-state"><div class="empty-icon">🔍</div><p style="font-size:13px">企業名を入力して調査ボタンを押してください</p></div>` : ""}
+    ${resultHtml}`;
+}
+
+// ── SEARCH ──────────────────────────────────────────────
+async function doSearch() {
+  const input = document.getElementById("companyInput");
+  const name = input ? input.value.trim() : "";
+  if (!name || searchLoading) return;
+
+  // ローディング状態をパネルに直接表示（renderPanel不要）
+  searchLoading = true;
+  searchError = "";
+  searchName = name;
+  renderPanel();
+
+  try {
+    const prompt = "「" + name + "」について幅広く調査し、以下のJSON形式のみで回答してください（説明文・コードブロック不要）: {\"company\":\"正式企業名\",\"description\":\"企業概要（100文字以内・素人向け）\",\"house_emoney_affinity\":\"high/medium/lowのいずれか\",\"affinity_reason\":\"ハウス電子マネー・ギフトカードとの親和性の理由（80文字以内）\",\"news\":\"最近のニュース・動向・地域との取り組みなど（150文字以内）\",\"source_url\":\"公式サイトURL\",\"services\":[{\"name\":\"サービス・施策名\",\"category\":\"電子マネー/POS/残高管理/決済端末/ポイント/ギフトカード/決済/地域連携/社会貢献/その他\",\"description\":\"素人にもわかるサービス・施策の説明（120文字以内）\",\"target\":\"想定顧客・対象者\",\"url\":\"公式ページURL\"}]} servicesは電子マネー・決済サービスだけでなく、主力事業・地域との取り組み・社会貢献・キャンペーン施策など幅広く8〜15件含めてください。JSONのみ返してください。";
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 4000,
+        system: "あなたはフィンテック・決済業界の専門アナリストです。必ずJSONのみで回答してください。",
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
+
+    const raw = await res.text();
+    if (!res.ok) {
+      let msg = "HTTP " + res.status;
+      try { msg = JSON.parse(raw).error?.message || msg; } catch {}
+      throw new Error(msg + " / " + raw.slice(0, 100));
+    }
+    const data = JSON.parse(raw);
+    const text = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("").trim();
+    const clean = text.replace(/^```json\s*/i,"").replace(/\s*```$/i,"").trim();
+    const result = JSON.parse(clean);
+    result.fetchedAt = new Date().toISOString();
+    const existing = companies.findIndex(c => c.company === result.company);
+    if (existing >= 0) companies[existing] = result;
+    else companies = [result, ...companies];
+    activeCompany = result.company;
+    searchError = "";
+  } catch (e) {
+    searchError = e?.message || String(e);
+  } finally {
+    searchLoading = false;
+    renderPanel();
+  }
+}
+
+function selectCompany(name) {
+  activeCompany = name;
+  renderPanel();
+}
+
+function switchTab(id) {
+  activeTab = id;
+  showDesc = true;
+  renderAll();
+}
+
+function toggleDesc() {
+  showDesc = !showDesc;
+  renderDesc();
+}
+
+// ── INIT ──────────────────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>
